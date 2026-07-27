@@ -71,6 +71,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         last = 4;
     }
 
+
     private T[] getArray() {
         T[] arr = (T[]) new Object[capacity];
         for (int i = first + 1, j = 0;j < size;i = (i + 1) % capacity, j++) {
