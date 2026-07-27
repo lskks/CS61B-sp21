@@ -5,9 +5,9 @@ import java.util.Iterator;
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] items;
     private int size = 0;
-    int first;
-    int last;
-    int capacity = 8;
+    private int first;
+    private int last;
+    private int capacity = 8;
 
     private class ArrayDequeIterator implements Iterator<T> {
         int pos;
@@ -127,10 +127,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         T val = items[last];
         size--;
         return val;
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
     }
 
     public int size() {

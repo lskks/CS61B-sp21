@@ -81,10 +81,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         size++;
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
     public int size() {
         return size;
     }
@@ -185,5 +181,25 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             if (!thisItem.equals(otherItem)) return false;
         }
         return true;
+    }
+
+    private T recursive(int index, Node curHead) {
+        if (index == 0) {
+            return curHead.next.value;
+        }
+
+        return recursive(index - 1, curHead.next);
+    }
+
+    public T getRecursive(int index) {
+        if (isEmpty()) {
+            return null;
+        }
+
+        if (index < 0 || index >= size) {
+            return null;
+        }
+
+        return recursive(index, head);
     }
 }
