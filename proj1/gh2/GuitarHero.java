@@ -6,7 +6,7 @@ import edu.princeton.cs.algs4.StdAudio;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class GuitarHero {
-    private static final String notes = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
+    private static final String NOTES = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
     private static final double CONCERT = 440.0;
 
     public static void main(String[] args) {
@@ -19,8 +19,8 @@ public class GuitarHero {
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char key = StdDraw.nextKeyTyped();
-                for (int i = 0; i < notes.length(); i++) {
-                    if (notes.charAt(i) == key) {
+                for (int i = 0; i < NOTES.length(); i++) {
+                    if (NOTES.charAt(i) == key) {
                         keyboards[i].pluck();
                     }
                 }

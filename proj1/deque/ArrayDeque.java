@@ -10,11 +10,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private int capacity = 8;
 
     private class ArrayDequeIterator implements Iterator<T> {
-        int pos;
-        int cnt;
+        private int pos;
+        private int cnt;
 
-        public ArrayDequeIterator() {
-            pos = first + 1;
+        ArrayDequeIterator() {
+            pos = (first + 1) % capacity;
             cnt = 0;
         }
 
@@ -48,13 +48,21 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return false;
         }
 
-        for (int i = 0;i < size;i++) {
+        for (int i = 0; i < size; i++) {
             T thisItem = this.get(i);
             Object otherItem = other.get(i);
 
-            if (thisItem == null && otherItem == null) continue;
-            if (thisItem == null || otherItem == null) return false;
-            if (!thisItem.equals(otherItem)) return false;
+            if (thisItem == null && otherItem == null) {
+                continue;
+            }
+
+            if (thisItem == null || otherItem == null) {
+                return false;
+            }
+
+            if (!thisItem.equals(otherItem)) {
+                return false;
+            }
         }
 
         return true;
@@ -74,7 +82,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     private T[] getArray() {
         T[] arr = (T[]) new Object[capacity];
-        for (int i = first + 1, j = 0;j < size;i = (i + 1) % capacity, j++) {
+        for (int i = (first + 1) % capacity, j = 0; j < size; i = (i + 1) % capacity, j++) {
             arr[j] = items[i];
         }
         return arr;
@@ -84,9 +92,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         T[] arr = getArray();
         T[] newArr = (T[]) new Object[length];
 
-        System.arraycopy(arr, 0, newArr, capacity / 2, size);
-        first = capacity / 2 - 1;
-        last = first + size + 1;
+        System.arraycopy(arr, 0, newArr, 1, size);
+        first = 0;
+        last = size + 1;
         items = newArr;
         capacity = length;
     }
@@ -142,7 +150,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     public void printDeque() {
-//        for (int i = first + 1, j = 0;j < size;i = (i + 1) % capacity, j++) {
         for (T i : this) {
             System.out.print(i + " ");
         }
