@@ -38,29 +38,18 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || !(o instanceof Deque)) {
             return false;
         }
 
-        ArrayDeque<T> other = (ArrayDeque<T>) o;
+        Deque<T> other = (Deque<T>) o;
 
-        if (this.size != other.size) {
+        if (this.size() != other.size()) {
             return false;
         }
 
-        for (int i = 0; i < size; i++) {
-            T thisItem = this.get(i);
-            Object otherItem = other.get(i);
-
-            if (thisItem == null && otherItem == null) {
-                continue;
-            }
-
-            if (thisItem == null || otherItem == null) {
-                return false;
-            }
-
-            if (!thisItem.equals(otherItem)) {
+        for (int i = 0; i < size(); i++) {
+            if (!this.get(i).equals(other.get(i))) {
                 return false;
             }
         }
@@ -124,6 +113,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         first = (first + 1) % capacity;
         T val = items[first];
         size--;
+
+        if (size <= capacity * 0.25 && capacity >= 16) {
+            resize((int) Math.round(capacity * 0.5));
+        }
+
         return val;
     }
 
@@ -134,6 +128,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         last = (last - 1 + capacity) % capacity;
         T val = items[last];
         size--;
+
+        if (size <= capacity * 0.25 && capacity >= 16) {
+            resize((int) Math.round(capacity * 0.5));
+        }
+
         return val;
     }
 
