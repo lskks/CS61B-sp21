@@ -1,6 +1,8 @@
 package deque;
 
-public class LinkedListDeque<T>/* implements Iterable<T>*/ {
+import java.util.Iterator;
+
+public class LinkedListDeque<T> implements Iterable<T> {
     private class Node {
         private T value;
         private Node next;
@@ -16,6 +18,34 @@ public class LinkedListDeque<T>/* implements Iterable<T>*/ {
     private Node head;
     private Node last;
     private int size = 0;
+
+    private class LLDequeIterator implements Iterator<T> {
+        private int pos;
+        private Node node;
+
+        public LLDequeIterator() {
+            pos = 0;
+            node = head.next;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return pos < size;
+        }
+
+        @Override
+        public T next() {
+            T ret = node.value;
+            node = node.next;
+            pos++;
+            return ret;
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LLDequeIterator();
+    }
 
     public LinkedListDeque() {
         head = new Node(null);
@@ -118,7 +148,7 @@ public class LinkedListDeque<T>/* implements Iterable<T>*/ {
 
         int i = 0;
         Node node = head.next;
-        while (head.next != null && node != head) {
+        while (node != head) {
             if (i == index) {
                 return node.value;
             }
@@ -132,6 +162,28 @@ public class LinkedListDeque<T>/* implements Iterable<T>*/ {
 
     @Override
     public boolean equals(Object o) {
-        return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        LinkedListDeque<T> other = (LinkedListDeque<T>) o;
+
+        if (this.size != other.size) {
+            return false;
+        }
+
+        for (int i = 0;i < size;i++) {
+            T thisItem = this.get(i);
+            Object otherItem = other.get(i);
+
+            if (thisItem == null && otherItem == null) continue;
+            if (thisItem == null || otherItem == null) return false;
+            if (!thisItem.equals(otherItem)) return false;
+        }
+        return true;
     }
 }
