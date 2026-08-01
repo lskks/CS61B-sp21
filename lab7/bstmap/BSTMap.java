@@ -86,6 +86,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         size++;
     }
 
+    public void printInOrder(Node node) {
+        printInOrder(node.left);
+        System.out.println(node.key.toString() + " : " + node.value.toString());
+        printInOrder(node.right);
+    }
+
     @Override
     public Set<K> keySet() {
         throw new UnsupportedOperationException();
