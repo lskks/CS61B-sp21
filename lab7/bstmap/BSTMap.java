@@ -86,10 +86,14 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         size++;
     }
 
-    public void printInOrder(Node node) {
-        printInOrder(node.left);
+    private void recursivePrint(Node node) {
+        recursivePrint(node.left);
         System.out.println(node.key.toString() + " : " + node.value.toString());
-        printInOrder(node.right);
+        recursivePrint(node.right);
+    }
+
+    public void printInOrder() {
+        recursivePrint(root);
     }
 
     @Override
