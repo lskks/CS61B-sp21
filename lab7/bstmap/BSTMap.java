@@ -1,5 +1,6 @@
 package bstmap;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     private Node root;
     private int size;
+    private V deletedVal;
 
     private Node recursiveSearch(K key, Node node) {
         if (node == null) {
@@ -92,27 +94,126 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         recursivePrint(node.right);
     }
 
+    private Node min(Node node) {
+        if (node.left == null) {
+            return node;
+        }
+
+        return min(node.left);
+    }
+
+    private Node deleteMin(Node node) {
+        if (node.left == null) {
+            return node.right;
+        }
+
+        node.left = deleteMin(node.left);
+        return node;
+    }
+
+    private Node recursiveRemove(Node node, K key) {
+        if (node == null) {
+            return null;
+        }
+
+        int cmp = key.compareTo(node.key);
+
+        if (cmp < 0) {
+            recursiveRemove(node.left, key);
+        } else if (cmp > 0) {
+            recursiveRemove(node.right, key);
+        } else {
+            deletedVal = node.value;
+
+            if (node.left == null) {
+                return node.right;
+            }
+
+            if (node.right == null) {
+                return node.left;
+            }
+
+            Node t = node;
+            node = min(t.right);
+            node.right = deleteMin(node.right);
+            node.left = t.left;
+        }
+
+        return node;
+    }
+
+    private Node recursiveRemoveWithVal(Node node, K key, V val) {
+        if (node == null) {
+            return null;
+        }
+
+        int cmp = key.compareTo(node.key);
+
+        if (cmp < 0) {
+            recursiveRemove(node.left, key);
+        } else if (cmp > 0) {
+            recursiveRemove(node.right, key);
+        } else {
+            if (node.value != val) {
+                deletedVal = null;
+                return node;
+            }
+
+            deletedVal = node.value;
+
+            if (node.left == null) {
+                return node.right;
+            }
+
+            if (node.right == null) {
+                return node.left;
+            }
+
+            Node t = node;
+            node = min(t.right);
+            node.right = deleteMin(node.right);
+            node.left = t.left;
+        }
+
+        return node;
+    }
+
+    private void keySetRecursive(Node node, Set<K> keys) {
+        if (node == null) {
+            return;
+        }
+
+        keySetRecursive(node.left, keys);
+        keys.add(node.key);
+        keySetRecursive(node.right, keys);
+    }
+
     public void printInOrder() {
         recursivePrint(root);
     }
 
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set<K> keys = new HashSet<>();
+        keySetRecursive(root, keys);
+        return keys;
     }
 
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        root = recursiveRemove(root, key);
+        size--;
+        return deletedVal;
     }
 
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        root = recursiveRemoveWithVal(root, key, value);
+        return deletedVal;
     }
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return keySet().iterator();
     }
 }
